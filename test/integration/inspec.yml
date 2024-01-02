@@ -1,0 +1,8 @@
+name: integration-test
+title: Integration Test
+maintainer: Nils Stein
+license: Apache-2.0
+summary: Integration test of MegaBasterd Docker
+version: 0.1.0
+supports:
+  - platform-name: alpine
