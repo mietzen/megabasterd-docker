@@ -17,7 +17,7 @@ RUN \
 
 COPY rootfs/ /
 RUN mkdir -p /defaults/MegaBasterd
-ADD --chmod=755 DOWNLOAD_URL /defaults/MegaBasterd
+ADD --chmod=755 ${DOWNLOAD_URL} /defaults/MegaBasterd
 
 RUN \
     set-cont-env APP_NAME "MegaBasterd" && \
