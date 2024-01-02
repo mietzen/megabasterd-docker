@@ -55,6 +55,11 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
+    - name: Install Perquisites
+      run: |
+        curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec -v 5.22.36
+        inspec --chef-license=accept
+
     - name: Build
       env:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
@@ -65,15 +70,32 @@ jobs:
         ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
         echo ""
         echo "============================================================="
-        echo "Building: ${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}-${BUILD_NR}"
+        echo "Building: ${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}"
         echo "============================================================="
         echo ""
         docker buildx build \
-          --tag "${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}-${BUILD_NR}" \
+          --tag "${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}" \
           --platform ${PLATFORM} \
           --build-arg VERSION=${VERSION} \
           --load \
           -f ./Dockerfile .
+
+    - name: Test
+      env:
+        DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
+        BUILD_NR: ${{ github.run_number }}
+        PLATFORM: ${{ matrix.platforms }}
+        VERSION: ${{ needs.Setup.outputs.version }}
+      run: |
+        set -a
+        ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
+        echo ""
+        echo "============================================================="
+        echo "Testing: ${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}"
+        echo "============================================================="
+        echo ""
+        exec ./test/test.sh
+        echo ""
 
     - name: Login to Docker Hub
       if: github.event_name == 'release'
@@ -93,14 +115,14 @@ jobs:
         ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
         echo ""
         echo "============================================================="
-        echo "Pushing: ${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}-${BUILD_NR}"
+        echo "Pushing: ${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}"
         echo "============================================================="
         echo ""
-        docker tag "${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}-${BUILD_NR}" "${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}"
-        docker tag "${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}-${BUILD_NR}" "${DOCKER_USER}/MegaBasterd:${ARCH}"
-        docker push "${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}-${BUILD_NR}"
-        docker push "${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}"
-        docker push "${DOCKER_USER}/MegaBasterd:${ARCH}"
+        docker tag "${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}" "${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}"
+        docker tag "${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}" "${DOCKER_USER}/megabasterd:${ARCH}"
+        docker push "${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}"
+        docker push "${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}"
+        docker push "${DOCKER_USER}/megabasterd:${ARCH}"
 
   Shared-Manifest:
     if: github.event_name == 'release'
@@ -126,24 +148,24 @@ jobs:
       run: |
         echo ""
         echo "============================================================="
-        echo "Pushing shared manifest: ${DOCKER_USER}/MegaBasterd:${VERSION}"
+        echo "Pushing shared manifest: ${DOCKER_USER}/megabasterd:${VERSION}"
         echo "============================================================="
         echo ""
         echo "#!/bin/bash" > push-shared-tags.sh
-        echo -n "docker manifest create ${DOCKER_USER}/MegaBasterd:${VERSION}" >> push-shared-tags.sh
+        echo -n "docker manifest create ${DOCKER_USER}/megabasterd:${VERSION}" >> push-shared-tags.sh
         while read -r PLATFORM; do
           ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
-          echo -n " ${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
+          echo -n " ${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
         done <<< "$(cat .github/platforms.json | jq -r '.platforms | join("\n")')"
         echo "" >> push-shared-tags.sh
-        echo -n "docker manifest create ${DOCKER_USER}/MegaBasterd:latest" >> push-shared-tags.sh
+        echo -n "docker manifest create ${DOCKER_USER}/megabasterd:latest" >> push-shared-tags.sh
         while read -r PLATFORM; do
           ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
-          echo -n " ${DOCKER_USER}/MegaBasterd:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
+          echo -n " ${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
         done <<< "$(cat .github/platforms.json | jq -r '.platforms | join("\n")')"
         echo "" >> push-shared-tags.sh
-        echo "docker manifest push ${DOCKER_USER}/MegaBasterd:${VERSION}" >> push-shared-tags.sh
-        echo "docker manifest push ${DOCKER_USER}/MegaBasterd:latest" >> push-shared-tags.sh
+        echo "docker manifest push ${DOCKER_USER}/megabasterd:${VERSION}" >> push-shared-tags.sh
+        echo "docker manifest push ${DOCKER_USER}/megabasterd:latest" >> push-shared-tags.sh
         cat push-shared-tags.sh
         chmod +x ./push-shared-tags.sh
         ./push-shared-tags.sh
