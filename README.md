@@ -7,7 +7,7 @@ A containerized app for [MegaBasterd](https://github.com/tonikelope/megabasterd)
 version: '3'
 services:
   megabasterd:
-    image: mietzen/megabasterd
+    image: mietzen/megabasterd:latest
     name: megabasterd
     restart: unless-stopped
     ports:
