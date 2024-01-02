@@ -1,7 +1,7 @@
-ARG VERSION="8.21"
-ARG DOWNLOAD_URL="https://github.com/tonikelope/megabasterd/releases/download/v${VERSION}/MegaBasterd_${VERSION}.jar"
-
 FROM jlesage/baseimage-gui:alpine-3.18-v4.5.3
+
+ARG VERSION="8.21"
+ENV DOWNLOAD_URL="https://github.com/tonikelope/megabasterd/releases/download/v${VERSION}/MegaBasterd_${VERSION}.jar"
 
 RUN add-pkg \
     java-common \
