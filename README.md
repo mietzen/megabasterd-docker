@@ -3,7 +3,8 @@
 A containerized app for [MegaBasterd](https://github.com/tonikelope/megabasterd) using [jlesage/docker-baseimage-gui](https://github.com/jlesage/docker-baseimage-gui).
 
 ## docker-compose
-```
+
+```yaml
 version: '3'
 services:
   megabasterd:
@@ -11,8 +12,8 @@ services:
     name: megabasterd
     restart: unless-stopped
     ports:
-      - "5800:5800"
+      - 5800:5800
     volumes:
-      - "./config:/config"
-      - "./output:/output"
+      - ./config:/config
+      - ./output:/output
 ```
