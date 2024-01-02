@@ -1,23 +1,20 @@
-FROM jlesage/baseimage-gui:alpine-3.16-v4.4.2
+FROM jlesage/baseimage-gui:alpine-3.18-v4.5.3
 
 ARG VERSION="8.21"
 ENV DOWNLOAD_URL="https://github.com/tonikelope/megabasterd/releases/download/v${VERSION}/MegaBasterd_${VERSION}.jar"
 ENV APP_ICON="https://raw.githubusercontent.com/simple-icons/simple-icons/master/icons/mega.svg"
 
-RUN add-pkg \
-    openjdk8-jre \
-    jq \
-    ttf-dejavu \
-    rtmpdump \
-    moreutils
+RUN add-pkg --no-cache \
+    sqlite \
+    openjdk17-jre \
+    ttf-dejavu 
 
 RUN install_app_icon.sh "${APP_ICON}"
 
 COPY rootfs/ /
-RUN mkdir -p /defaults/MegaBasterd/jar
-ADD --chmod=755 ${DOWNLOAD_URL} /defaults/MegaBasterd/jar
-RUN mv /defaults/MegaBasterd/jar/MegaBasterd_${VERSION}.jar /defaults/MegaBasterd/jar/MegaBasterd.jar
-RUN touch /defaults/MegaBasterd/jar/.megabasterd_portable
+ADD --chmod=755 ${DOWNLOAD_URL} /defaults/MegaBasterd
+RUN mv /defaults/MegaBasterd/MegaBasterd_${VERSION}.jar /defaults/MegaBasterd/MegaBasterd.jar
+
 RUN set-cont-env APP_NAME "MegaBasterd" && \
     set-cont-env DOCKER_IMAGE_VERSION "${VERSION}" && \
     set-cont-env APP_VERSION "${VERSION}"

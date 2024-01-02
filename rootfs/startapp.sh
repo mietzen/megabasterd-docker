@@ -5,4 +5,4 @@ cd /config/MegaBasterd
             -XX:-UsePerfData \
             -Dawt.useSystemAAFontSettings=gasp \
             -Djava.awt.headless=false \
-            -jar ./jar/MegaBasterd.jar
+            -jar ./MegaBasterd.jar
