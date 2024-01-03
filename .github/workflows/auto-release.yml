@@ -1,35 +1,19 @@
 name: "Auto Release"
-
 on:
-  #schedule:
-  #  - cron:  '0 17 * * *'
-  workflow_dispatch:
+  pull_request:
+    types:
+      - closed
 
 jobs:
-  check-new-release:
-    name: "Check New Release"
-    runs-on: "ubuntu-latest"
-    outputs:
-      release: ${{ steps.new-release.outputs.release }}
-    steps:
-      - id: new-release
-        run: |
-          MEGABASTERD_VERSION=$(curl -s https://api.github.com/repos/tonikelope/megabasterd/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]")
-          MEGABASTERD_DOCKER_VERSION=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]" || echo -n "0")
-          if [ "${MEGABASTERD_VERSION}" = "${MEGABASTERD_DOCKER_VERSION}" ]; then
-            echo "release=TRUE" >> $GITHUB_OUTPUT
-          else
-            echo "release=FALSE" >> $GITHUB_OUTPUT
-          fi
   auto-release:
+    if: github.event.pull_request.merged == true && github.event.pull_request.user.login == 'merger-bot[bot]'
     name: "Auto Release"
-    needs: check-new-release
-    if: ${{needs.check-new-release.outputs.release}} == "TRUE"
     runs-on: "ubuntu-latest"
     steps:
+      - uses: actions/checkout@v3
       - id: get-version
         run: |
-          VERSION=$(curl -s https://api.github.com/repos/tonikelope/megabasterd/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g')
+          VERSION=$(sed -n 's/^ARG VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
           echo "version=v${VERSION}" >> $GITHUB_OUTPUT
       - uses: tibdex/github-app-token@v1
         id: generate-token
