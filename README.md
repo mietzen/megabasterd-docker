@@ -8,7 +8,7 @@ Supported archichectures:
 - amd64
 - arm64
 
-## docker-compose
+## Docker Compose
 
 Create a `docker-compose.yaml`:
 
