@@ -2,7 +2,11 @@
 
 A containerized [MegaBasterd](https://github.com/tonikelope/megabasterd) using [jlesage/docker-baseimage-gui](https://github.com/jlesage/docker-baseimage-gui).
 
-This repo has active CI/CD, updates are fully automatically build, tested, merged and released.
+This repo has active CI/CD, updates are fully automatically build, tested, merged and released as mutli arch image.
+
+Supported archichectures:
+- amd64
+- arm64
 
 ## docker-compose
 
