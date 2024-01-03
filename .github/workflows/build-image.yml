@@ -30,9 +30,7 @@ jobs:
             echo "This branch shouldn't be build: ${VERSION}"
             exit 1
           else
-            echo "Get latest version for PR:"
-            VERSION=$(curl -s https://api.github.com/repos/tonikelope/megabasterd/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g')
-            echo "Version: ${VERSION}"
+            VERSION=$(sed -n 's/^ARG VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
           fi
         fi
         echo "version=$(echo ${VERSION})" >> $GITHUB_OUTPUT
