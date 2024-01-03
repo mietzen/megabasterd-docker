@@ -17,7 +17,7 @@ version: '3'
 services:
   megabasterd:
     image: mietzen/megabasterd:latest
-    name: megabasterd
+    container_name: megabasterd
     restart: unless-stopped
     user: 1000:1000
     ports:
