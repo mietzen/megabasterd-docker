@@ -19,7 +19,6 @@ services:
     image: mietzen/megabasterd:latest
     container_name: megabasterd
     restart: unless-stopped
-    user: 1000:1000
     ports:
       - 5800:5800
     volumes:
