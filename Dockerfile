@@ -1,6 +1,6 @@
 FROM jlesage/baseimage-gui:alpine-3.18-v4.5.3
 
-ARG VERSION="8.21"
+ARG VERSION="8.20"
 ENV DOWNLOAD_URL="https://github.com/tonikelope/megabasterd/releases/download/v${VERSION}/MegaBasterd_${VERSION}.jar"
 ENV APP_ICON="https://raw.githubusercontent.com/simple-icons/simple-icons/master/icons/mega.svg"
 
