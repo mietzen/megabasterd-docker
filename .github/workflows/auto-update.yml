@@ -20,7 +20,7 @@ jobs:
         run: |
           MEGABASTERD_VERSION=$(curl -s https://api.github.com/repos/tonikelope/megabasterd/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]")
           MEGABASTERD_DOCKER_VERSION=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]" || echo -n "0")
-          if [ "${MEGABASTERD_VERSION}" = "${MEGABASTERD_DOCKER_VERSION}" ]; then
+          if [ ! "${MEGABASTERD_VERSION}" = "${MEGABASTERD_DOCKER_VERSION}" ]; then
             echo "release=TRUE" >> $GITHUB_OUTPUT
           else
             echo "release=FALSE" >> $GITHUB_OUTPUT
