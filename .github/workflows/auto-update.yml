@@ -15,13 +15,15 @@ jobs:
     runs-on: "ubuntu-latest"
     outputs:
       release: ${{ steps.new-release.outputs.release }}
+      version: ${{ steps.new-release.outputs.version }}
     steps:
       - id: new-release
         run: |
-          MEGABASTERD_VERSION=$(curl -s https://api.github.com/repos/tonikelope/megabasterd/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]")
+          MEGABASTERD_APP_VERSION=$(curl -s https://api.github.com/repos/tonikelope/megabasterd/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]")
           MEGABASTERD_DOCKER_VERSION=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]" || echo -n "0")
-          if [ ! "${MEGABASTERD_VERSION}" = "${MEGABASTERD_DOCKER_VERSION}" ]; then
+          if [ ! "${MEGABASTERD_APP_VERSION}" = "${MEGABASTERD_DOCKER_VERSION}" ]; then
             echo "release=TRUE" >> $GITHUB_OUTPUT
+            echo "version=${MEGABASTERD_APP_VERSION}"
           else
             echo "release=FALSE" >> $GITHUB_OUTPUT
           fi
@@ -33,14 +35,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Commit changes
+        env:
+          NEW_VERSION: ${{ needs.check-new-release.outputs.version }}
         id: commit
         run: |
-          NEW_VERSION=$(curl -s https://api.github.com/repos/tonikelope/megabasterd/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]")
           sed -i "s/ARG VERSION=\"[^\"]*\"/ARG VERSION=\"${NEW_VERSION}\"/g" Dockerfile
           git config --local user.email "131801252+merger-bot[bot]@users.noreply.github.com"
           git config --local user.name "merger-bot[bot]"
           git add Dockerfile
-          git commit -m "Updated MegaBasterd to ${NEW_VERSION}"
+          git commit -m "Updated MegaBasterd to: ${NEW_VERSION}"
       - uses: tibdex/github-app-token@v1
         id: generate-token
         with:
@@ -52,16 +55,15 @@ jobs:
         with:
           token: ${{ steps.generate-token.outputs.token }}
           delete-branch: true
-          title: '[Merger Bot] Updated MegaBasterd'
-          commit-message: Updated MegaBasterd
+          title: '[Merger Bot] Updated MegaBasterd to: ${{ needs.check-new-release.outputs.version }}'
+          commit-message: 'Updated MegaBasterd to: ${{ needs.check-new-release.outputs.version }}'
           committer: merger-bot[bot] <131801252+merger-bot[bot]@users.noreply.github.com>
           author: merger-bot[bot] <131801252+merger-bot[bot]@users.noreply.github.com>
           branch: auto-update
           labels: |
             automated pr
             update
-          body: |
-            Updated MegaBasterd
+          body: 'Updated MegaBasterd to: ${{ needs.check-new-release.outputs.version }}'
       - name: Automerge if possible
         if: steps.pr.outputs.pull-request-operation == 'created'
         uses: peter-evans/enable-pull-request-automerge@v2
