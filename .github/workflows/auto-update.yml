@@ -29,7 +29,7 @@ jobs:
   Updated-Megabasterd:
     runs-on: ubuntu-latest
     needs: check-new-release
-    if: ${{needs.check-new-release.outputs.release}} == "TRUE"
+    if: ${{ needs.check-new-release.outputs.release == 'TRUE' }}
     steps:
       - uses: actions/checkout@v3
       - name: Commit changes
@@ -41,8 +41,6 @@ jobs:
           git config --local user.name "merger-bot[bot]"
           git add Dockerfile
           git commit -m "Updated MegaBasterd to ${NEW_VERSION}"
-          echo "change=yes" >> $GITHUB_OUTPUT
-
       - uses: tibdex/github-app-token@v1
         id: generate-token
         with:
@@ -65,7 +63,7 @@ jobs:
           body: |
             Updated MegaBasterd
       - name: Automerge if possible
-        if: steps.commit.outputs.change == 'yes' && steps.pr.outputs.pull-request-operation == 'created'
+        if: steps.pr.outputs.pull-request-operation == 'created'
         uses: peter-evans/enable-pull-request-automerge@v2
         with:
           token: ${{ steps.generate-token.outputs.token }}
