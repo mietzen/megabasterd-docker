@@ -4,6 +4,6 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "github-actions"
-    directory: "/.github/workflows"
+    directory: ".github/workflows"
     schedule:
       interval: "weekly"
