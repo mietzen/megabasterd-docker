@@ -33,7 +33,7 @@ jobs:
     needs: check-new-release
     if: ${{ needs.check-new-release.outputs.release == 'TRUE' }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Commit changes
         env:
           NEW_VERSION: ${{ needs.check-new-release.outputs.version }}

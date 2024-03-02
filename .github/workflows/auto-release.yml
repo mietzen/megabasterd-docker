@@ -10,7 +10,7 @@ jobs:
     name: "Auto Release"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: get-version
         run: |
           VERSION=$(sed -n 's/^ARG VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
