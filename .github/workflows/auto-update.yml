@@ -66,7 +66,7 @@ jobs:
           body: 'Updated MegaBasterd to: ${{ needs.check-new-release.outputs.version }}'
       - name: Automerge if possible
         if: steps.pr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v2
+        uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ steps.generate-token.outputs.token }}
           pull-request-number: ${{ steps.pr.outputs.pull-request-number }}
