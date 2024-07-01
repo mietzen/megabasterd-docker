@@ -13,6 +13,8 @@ docker run -d --rm \
 # Install tools needed for inspect
 docker exec -u 0 megabasterd apk --no-cache add net-tools procps
 
+docker exec -u 0 megabasterd ps -aux
+
 echo "Test"
 inspec exec ./test/integration -t docker://megabasterd
 echo "Teardown"
