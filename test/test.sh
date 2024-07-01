@@ -13,11 +13,11 @@ docker run -d --rm \
 # Install tools needed for inspect
 docker exec -u 0 megabasterd apk --no-cache add net-tools procps
 
+# Wait for container to launch jvm
 sleep 10
 
 echo "Test"
-inspec exec ./test/integration -t docker://megabasterd || echo "failed"
+inspec exec ./test/integration -t docker://megabasterd
 
-docker exec -u 0 megabasterd ps aux
 echo "Teardown"
 docker container stop megabasterd
