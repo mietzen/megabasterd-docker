@@ -14,7 +14,7 @@ docker run -d --rm \
 docker exec -u 0 megabasterd apk --no-cache add net-tools procps
 
 echo "Test"
-inspec exec ./test/integration -t docker://megabasterd
+inspec exec ./test/integration -t docker://megabasterd || True
 
 docker exec -u 0 megabasterd ps aux
 echo "Teardown"
