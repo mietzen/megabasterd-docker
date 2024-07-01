@@ -13,6 +13,8 @@ docker run -d --rm \
 # Install tools needed for inspect
 docker exec -u 0 megabasterd apk --no-cache add net-tools procps
 
+sleep 10
+
 echo "Test"
 inspec exec ./test/integration -t docker://megabasterd || echo "failed"
 
