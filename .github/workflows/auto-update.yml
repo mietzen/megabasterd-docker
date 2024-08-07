@@ -23,7 +23,7 @@ jobs:
           MEGABASTERD_DOCKER_VERSION=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest | jq -r .tag_name | sed 's/^.\{1\}//g' | tr -d "[:space:]" || echo -n "0")
           if [ ! "${MEGABASTERD_APP_VERSION}" = "${MEGABASTERD_DOCKER_VERSION}" ]; then
             echo "release=TRUE" >> $GITHUB_OUTPUT
-            echo "version=${MEGABASTERD_APP_VERSION}"
+            echo "version=${MEGABASTERD_APP_VERSION}" >> $GITHUB_OUTPUT
           else
             echo "release=FALSE" >> $GITHUB_OUTPUT
           fi
