@@ -1,0 +1,29 @@
+name: Keep actions alive
+
+on:
+  schedule:
+   - cron: "0 0 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  Keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keep Alive Commit
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          if [ $(git ls-remote --heads origin refs/heads/keep-alive | wc -w) -eq 0 ]; then
+            git switch --orphan keep-alive
+            git commit --allow-empty -m "Initial keep alive commit"
+            git push -u origin keep-alive
+          else
+            git switch keep-alive
+            git reset --hard $(git rev-list --max-parents=0 --abbrev-commit HEAD)
+            git commit --allow-empty -m "Keep alive commit"
+            git push -f
+          fi
