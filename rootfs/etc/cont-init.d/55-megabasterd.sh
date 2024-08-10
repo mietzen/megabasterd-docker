@@ -14,6 +14,12 @@ if [ ! -f /config/MegaBasterd/MegaBasterd.jar ]; then
     mkdir -p /config/MegaBasterd/.megabasterd_old_backups
     cat /config/MegaBasterd/config.sql | sqlite3 /config/MegaBasterd/.megabasterd8.21/megabasterd.db
     rm -rf /config/MegaBasterd/config.sql
+else
+    # Check for upgrades
+    if [ ! $(cmp -s /defaults/MegaBasterd/MegaBasterd.jar /config/MegaBasterd/MegaBasterd.jar) ]; then
+        rm -rf /config/MegaBasterd/MegaBasterd.jar
+        cp /defaults/MegaBasterd/MegaBasterd.jar /config/MegaBasterd/MegaBasterd.jar
+    fi
 fi
 
 # Take ownership of the output directory.

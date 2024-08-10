@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - id: get-version
         run: |
-          VERSION=$(sed -n 's/^ARG VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
+          VERSION=$(sed -n 's/^ENV MEGABASTERD_VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
           echo "version=v${VERSION}" >> $GITHUB_OUTPUT
       - uses: actions/create-github-app-token@v1
         id: generate-token

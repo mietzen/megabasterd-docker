@@ -39,7 +39,7 @@ jobs:
           NEW_VERSION: ${{ needs.check-new-release.outputs.version }}
         id: commit
         run: |
-          sed -i "s/ARG VERSION=\"[^\"]*\"/ARG VERSION=\"${NEW_VERSION}\"/g" Dockerfile
+          sed -i "s/ENV MEGABASTERD_VERSION=\"[^\"]*\"/ENV MEGABASTERD_VERSION=\"${NEW_VERSION}\"/g" Dockerfile
           git config --local user.email "131801252+merger-bot[bot]@users.noreply.github.com"
           git config --local user.name "merger-bot[bot]"
           git add Dockerfile
