@@ -30,7 +30,7 @@ jobs:
             echo "This branch shouldn't be build: ${VERSION}"
             exit 1
           else
-            VERSION=$(sed -n 's/^ARG VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
+            VERSION=$(sed -n 's/^ENV MEGABASTERD_VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
           fi
         fi
         echo "version=$(echo ${VERSION})" >> $GITHUB_OUTPUT
