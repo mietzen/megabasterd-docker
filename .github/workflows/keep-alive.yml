@@ -15,6 +15,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Keep Alive Commit
         run: |
+          set -e
+          set -x
+          set -o pipefail
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
           if [ $(git ls-remote --heads origin refs/heads/keep-alive | wc -w) -eq 0 ]; then
