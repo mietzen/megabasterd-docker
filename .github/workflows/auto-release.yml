@@ -15,7 +15,7 @@ jobs:
         run: |
           VERSION=$(sed -n 's/^ENV MEGABASTERD_VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
           echo "version=v${VERSION}" >> $GITHUB_OUTPUT
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         id: generate-token
         with:
           app-id: ${{ secrets.APP_ID }}
