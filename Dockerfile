@@ -1,4 +1,4 @@
-FROM jlesage/baseimage-gui:alpine-3.18-v4.8.2
+FROM jlesage/baseimage-gui:alpine-3.18-v4.9.0
 
 ENV MEGABASTERD_VERSION="8.22"
 ENV DOWNLOAD_URL="https://github.com/tonikelope/megabasterd/releases/download/v${MEGABASTERD_VERSION}/MegaBasterd_${MEGABASTERD_VERSION}.jar"
