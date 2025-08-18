@@ -10,7 +10,7 @@ jobs:
     name: "Auto Release"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: get-version
         run: |
           VERSION=$(sed -n 's/^ENV MEGABASTERD_VERSION="\([.0-9]*\)"/\1/p' Dockerfile)
