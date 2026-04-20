@@ -1,6 +1,6 @@
 FROM jlesage/baseimage-gui:alpine-3.18-v4.11.3
 
-ENV MEGABASTERD_VERSION="8.22"
+ENV MEGABASTERD_VERSION="8.23"
 ENV DOWNLOAD_URL="https://github.com/tonikelope/megabasterd/releases/download/v${MEGABASTERD_VERSION}/MegaBasterd_${MEGABASTERD_VERSION}.jar"
 ENV APP_ICON="https://raw.githubusercontent.com/tonikelope/megabasterd/master/src/main/resources/images/pica_roja_big.png"
 
