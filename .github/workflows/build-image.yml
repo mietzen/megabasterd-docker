@@ -7,7 +7,7 @@ on:
 
 jobs:
   Setup:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       version: ${{ steps.set-matrix.outputs.version }}
       build_matrix: ${{ steps.set-matrix.outputs.build_matrix }}
@@ -123,7 +123,7 @@ jobs:
 
   Shared-Manifest:
     if: github.event_name == 'release'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs:
       - Build
       - Setup
@@ -169,7 +169,7 @@ jobs:
 
   Check-Build:
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs:
       - Setup
       - Build
