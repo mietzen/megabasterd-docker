@@ -6,7 +6,7 @@ ENV APP_ICON="https://raw.githubusercontent.com/tonikelope/megabasterd/master/sr
 
 RUN add-pkg --no-cache \
     sqlite \
-    openjdk24-jre \
+    openjdk25-jre \
     ttf-dejavu
 
 RUN install_app_icon.sh ${APP_ICON}
