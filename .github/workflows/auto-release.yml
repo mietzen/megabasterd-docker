@@ -8,7 +8,7 @@ jobs:
   auto-release:
     if: github.event.pull_request.merged == true && github.event.pull_request.user.login == 'merger-bot[bot]'
     name: "Auto Release"
-    runs-on: "ubuntu-latest"
+    runs-on: "ubuntu-26.04"
     steps:
       - uses: actions/checkout@v7
       - id: get-version

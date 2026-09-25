@@ -12,7 +12,7 @@ permissions:
 jobs:
   check-new-release:
     name: "Check New Release"
-    runs-on: "ubuntu-latest"
+    runs-on: "ubuntu-26.04"
     outputs:
       release: ${{ steps.new-release.outputs.release }}
       version: ${{ steps.new-release.outputs.version }}
@@ -29,7 +29,7 @@ jobs:
           fi
 
   Updated-Megabasterd:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: check-new-release
     if: ${{ needs.check-new-release.outputs.release == 'TRUE' }}
     steps:
