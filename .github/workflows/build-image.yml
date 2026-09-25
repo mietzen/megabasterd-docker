@@ -37,7 +37,7 @@ jobs:
         echo "build_matrix=$(cat .github/platforms.json)" >> $GITHUB_OUTPUT
 
   Build:
-    runs-on: ${{ matrix.platforms.runner }}
+    runs-on: ubuntu-latest
     needs: Setup
     strategy:
       fail-fast: false
@@ -61,7 +61,7 @@ jobs:
       env:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
         BUILD_NR: ${{ github.run_number }}
-        PLATFORM: ${{ matrix.platforms.platform }}
+        PLATFORM: ${{ matrix.platforms }}
         VERSION: ${{ needs.Setup.outputs.version }}
       run: |
         ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
@@ -81,7 +81,7 @@ jobs:
       env:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
         BUILD_NR: ${{ github.run_number }}
-        PLATFORM: ${{ matrix.platforms.platform }}
+        PLATFORM: ${{ matrix.platforms }}
         VERSION: ${{ needs.Setup.outputs.version }}
       run: |
         set -a
@@ -106,7 +106,7 @@ jobs:
       env:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
         BUILD_NR: ${{ github.run_number }}
-        PLATFORM: ${{ matrix.platforms.platform }}
+        PLATFORM: ${{ matrix.platforms }}
         VERSION: ${{ needs.Setup.outputs.version }}
       run: |
         ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
@@ -153,13 +153,13 @@ jobs:
         while read -r PLATFORM; do
           ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
           echo -n " ${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
-        done <<< "$(cat .github/platforms.json | jq -r '.platforms[].platform')"
+        done <<< "$(cat .github/platforms.json | jq -r '.platforms | join("\n")')"
         echo "" >> push-shared-tags.sh
         echo -n "docker manifest create ${DOCKER_USER}/megabasterd:latest" >> push-shared-tags.sh
         while read -r PLATFORM; do
           ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
           echo -n " ${DOCKER_USER}/megabasterd:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
-        done <<< "$(cat .github/platforms.json | jq -r '.platforms[].platform')"
+        done <<< "$(cat .github/platforms.json | jq -r '.platforms | join("\n")')"
         echo "" >> push-shared-tags.sh
         echo "docker manifest push ${DOCKER_USER}/megabasterd:${VERSION}" >> push-shared-tags.sh
         echo "docker manifest push ${DOCKER_USER}/megabasterd:latest" >> push-shared-tags.sh
