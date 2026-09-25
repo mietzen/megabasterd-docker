@@ -34,7 +34,7 @@ jobs:
           fi
         fi
         echo "version=$(echo ${VERSION})" >> $GITHUB_OUTPUT
-        echo "build_matrix=$(cat .github/platforms.json)" >> $GITHUB_OUTPUT
+        echo "build_matrix=$(jq -c . .github/platforms.json)" >> $GITHUB_OUTPUT
 
   Build:
     runs-on: ${{ matrix.platforms.runner }}
