@@ -1,10 +1,10 @@
-name: "Auto Merge Dependabot"
+name: Auto Merge Dependabot
 on:
   pull_request:
-      types:
-        - opened
-      branches:
-        - 'main'
+    types:
+      - opened
+    branches:
+      - "main"
 
 permissions:
   pull-requests: write
@@ -12,16 +12,21 @@ permissions:
 
 jobs:
   auto-merge:
+    name: "Auto Merge Dependabot PR"
     runs-on: ubuntu-26.04
     if: github.actor == 'dependabot[bot]'
     steps:
+      - uses: actions/checkout@v7
       - uses: actions/create-github-app-token@v3
         id: generate-token
         with:
-          app-id: ${{ secrets.APP_ID }}
+          client-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-      - uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ steps.generate-token.outputs.token }}
-          pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: squash
+      - name: Enable Pull Request Automerge
+        run: gh pr merge --squash --auto "${{ github.event.pull_request.number }}"
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+      - name: Auto approve
+        run: gh pr review --approve "${{ github.event.pull_request.number }}"
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
