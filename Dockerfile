@@ -1,4 +1,4 @@
-FROM jlesage/baseimage-gui:alpine-3.18-v4.14.0
+FROM jlesage/baseimage-gui:alpine-3.24-v4.14.0
 
 ENV MEGABASTERD_VERSION="8.61"
 ENV DOWNLOAD_URL="https://github.com/tonikelope/megabasterd/releases/download/v${MEGABASTERD_VERSION}/MegaBasterd_${MEGABASTERD_VERSION}.jar"
@@ -6,7 +6,7 @@ ENV APP_ICON="https://raw.githubusercontent.com/tonikelope/megabasterd/master/sr
 
 RUN add-pkg --no-cache \
     sqlite \
-    openjdk17-jre \
+    openjdk24-jre \
     ttf-dejavu
 
 RUN install_app_icon.sh ${APP_ICON}
